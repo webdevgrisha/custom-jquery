@@ -317,6 +317,7 @@ describe('methods', () => {
 
     it('Should remove attribute if value is null', () => {
       $div.attr('id', null);
+
       expect(divElement.hasAttribute('id')).toBe(false);
     });
 
