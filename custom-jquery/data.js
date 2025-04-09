@@ -1,14 +1,12 @@
 function data(name, value) {
-  const element = this.firstElement;
+  const element = this[0];
 
   if (name === undefined) {
     return element.dataset;
   }
 
   if (typeof name === 'string' && value === undefined) {
-    console.log(element.dataset[name]);
-
-    return this.elements[0].dataset[name];
+    return element.dataset[name];
   }
 
   if (typeof name === 'string') {

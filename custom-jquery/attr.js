@@ -6,17 +6,17 @@ function attr(attrName, attrValue) {
   }
 
   if (typeof attrValue === 'undefined') {
-    return this.firstElement.getAttribute(attrName);
+    return this[0].getAttribute(attrName);
   }
 
   if (typeof attrValue === 'string') {
-    this.elements.forEach((elem) => {
+    this.each((_, elem) => {
       elem.setAttribute(attrName, attrValue);
     });
   }
 
   if (typeof attrValue === 'function') {
-    this.elements.forEach((elem, index) => {
+    this.each((index, elem) => {
       const newAttrValue = attrValue.call(
         elem,
         index,
@@ -28,7 +28,7 @@ function attr(attrName, attrValue) {
   }
 
   if (attrValue === null) {
-    this.elements.forEach((elem) => {
+    this.each((_, elem) => {
       elem.removeAttribute(attrName);
     });
   }

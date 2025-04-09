@@ -1,13 +1,13 @@
 function html(argument) {
   if (argument === undefined) {
-    return this.elements[0].innerHTML;
+    return this[0].innerHTML;
   } else if (typeof argument === 'string') {
-    this.elements.forEach((elem) => {
+    this.each((_, elem) => {
       elem.innerHTML = argument;
     });
   } else if (typeof argument === 'function') {
-    this.elements.forEach((elem, index) => {
-      const htmlContent = argument.call(elem, index, elem.innerHTML);
+    this.each((_, elem) => {
+      const htmlContent = argument.call(elem, _, elem.innerHTML);
 
       elem.innerHTML = htmlContent;
     });

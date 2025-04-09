@@ -1,6 +1,8 @@
 function each(callback) {
-  for (let i = 0; i < this.elements.length; i++) {
-    const result = callback.call(this.elements[i], i, this.elements[i]);
+  let currIndex = 0;
+
+  for (let value of this) {
+    const result = callback.call(value, currIndex++, value);
 
     if (result === false) break;
   }

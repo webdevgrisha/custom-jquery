@@ -1,22 +1,22 @@
 function append(content) {
   if (content instanceof this.constructor) {
-    this.elements.forEach((elem) => {
-      content.elements.forEach((childElem) => {
+    this.each((_, elem) => {
+      content.each((_, childElem) => {
         elem.append(childElem.cloneNode(true));
       });
     });
   } else if (content instanceof HTMLElement) {
-    this.elements.forEach((elem) => {
+    this.each((_, elem) => {
       elem.append(content.cloneNode(true));
     });
   } else if (typeof content === 'string') {
-    this.elements.forEach((elem) => {
+    this.each((_, elem) => {
       elem.append(content);
     });
   } else if (Array.isArray(content)) {
     const arrStr = content.join('');
 
-    this.elements.forEach((elem) => {
+    this.each((_, elem) => {
       elem.append(arrStr);
     });
   }

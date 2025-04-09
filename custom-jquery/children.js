@@ -1,20 +1,6 @@
-class ChildrenCollection {
-  constructor(elements) {
-    this.elements = Array.from(elements);
-  }
-
-  each(callback) {
-    this.elements.forEach((childElem, index) => callback(index, childElem));
-  }
-
-  get length() {
-    return this.elements.length;
-  }
-}
-
 function children(selector) {
   let collection = null;
-  const element = this.firstElement;
+  const element = this[0];
 
   if (typeof selector === 'string') {
     collection = element.querySelectorAll(selector);
@@ -22,7 +8,7 @@ function children(selector) {
     collection = element.children;
   }
 
-  const childrenCollection = new ChildrenCollection(collection);
+  const childrenCollection = new this.constructor(collection);
 
   return childrenCollection;
 }

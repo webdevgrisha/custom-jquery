@@ -1,16 +1,18 @@
 function get(index) {
   if (index === undefined) {
-    return this.elements;
+    return Array.from(this);
   }
 
   index = +index;
 
   if (!Number.isNaN(index) && index >= 0) {
-    return this.elements[index];
+    return this[index];
   }
 
   if (index < 0) {
-    return this.elements.at(index);
+    const newIndex = this.length + index;
+
+    return this[newIndex];
   }
 }
 

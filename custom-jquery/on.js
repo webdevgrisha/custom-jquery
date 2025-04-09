@@ -49,7 +49,7 @@ function on(eventName, ...config) {
       addElemEvent(element, eventName, data, callback, options);
     });
   } else {
-    this.elements.forEach((element) => {
+    this.each((_, element) => {
       addElemEvent(element, eventName, data, callback, options);
     });
   }

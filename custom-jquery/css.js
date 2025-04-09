@@ -1,12 +1,12 @@
 function css(argument, styleValue) {
-  const element = this.firstElement;
+  const element = this[0];
 
   if (typeof styleValue === 'string') {
     element.style[argument] = styleValue;
   }
 
   if (typeof styleValue === 'function') {
-    this.elements.forEach((elem, index) => {
+    this.each((index, elem) => {
       const newStyleValue = styleValue.call(elem, index, elem.style[argument]);
       elem.style[argument] = newStyleValue;
     });
@@ -25,7 +25,7 @@ function css(argument, styleValue) {
   }
 
   if (argument.toString() === '[object Object]') {
-    this.elements.forEach((elem) => {
+    this.each((_, elem) => {
       Object.entries(argument).forEach(([styleName, styleValue]) => {
         elem.style[styleName] = styleValue;
       });

@@ -12,7 +12,7 @@ function filterClassNames(classNames) {
 
 function addClass(argument) {
   if (typeof argument === 'function') {
-    this.elements.forEach((elem, index) => {
+    this.each((index, elem) => {
       const classNames = argument.call(elem, index, elem.className);
 
       const classNamesArr = filterClassNames(classNames);
@@ -20,8 +20,10 @@ function addClass(argument) {
       elem.classList.add(...classNamesArr);
     });
   } else {
-    this.elements.forEach((elem) => {
+    this.each((_, elem) => {
+      console.log({ _, elem });
       const classNamesArr = filterClassNames(argument);
+
       elem.classList.add(...classNamesArr);
     });
   }
