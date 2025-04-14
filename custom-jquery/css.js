@@ -1,38 +1,52 @@
-function css(argument, styleValue) {
-  const element = this[0];
+const { getArgumentType } = require('./utils/getArgumentType');
 
-  if (typeof styleValue === 'string') {
+const cssTypeFuncs = {
+  string(element, argument, styleValue) {
+    if (styleValue === undefined) {
+      return element.style[argument];
+    }
+
     element.style[argument] = styleValue;
-  }
-
-  if (typeof styleValue === 'function') {
+  },
+  function(_, argument, styleValue) {
     this.each((index, elem) => {
       const newStyleValue = styleValue.call(elem, index, elem.style[argument]);
       elem.style[argument] = newStyleValue;
     });
-  }
-
-  if (typeof argument === 'string') {
-    return element.style[argument];
-  }
-
-  if (Array.isArray(argument)) {
+  },
+  array(element, argument) {
     return argument.reduce((obj, propName) => {
       obj[propName] = element.style[propName];
 
       return obj;
     }, {});
-  }
-
-  if (argument.toString() === '[object Object]') {
+  },
+  object(_, argument) {
     this.each((_, elem) => {
       Object.entries(argument).forEach(([styleName, styleValue]) => {
         elem.style[styleName] = styleValue;
       });
     });
-  }
+  },
+};
 
-  return this;
+function css(argument, styleValue) {
+  const element = this[0];
+
+  const argumentType = getArgumentType.call(this, argument);
+  const styleValueType = getArgumentType.call(this, styleValue);
+
+  const funcName =
+    styleValueType === 'function' ? styleValueType : argumentType;
+
+  const result = cssTypeFuncs[funcName].call(
+    this,
+    element,
+    argument,
+    styleValue
+  );
+
+  return result ?? this;
 }
 
 module.exports = { css };

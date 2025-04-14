@@ -1,25 +1,37 @@
-function append(content) {
-  if (content instanceof this.constructor) {
+const { getArgumentType } = require("./utils/getArgumentType");
+
+const appendTypeFuncs = {
+  constructor(content) {
     this.each((_, elem) => {
       content.each((_, childElem) => {
         elem.append(childElem.cloneNode(true));
       });
     });
-  } else if (content instanceof HTMLElement) {
+  },
+  element(content) {
     this.each((_, elem) => {
       elem.append(content.cloneNode(true));
     });
-  } else if (typeof content === 'string') {
+  },
+  string(content) {
     this.each((_, elem) => {
       elem.append(content);
     });
-  } else if (Array.isArray(content)) {
+  },
+  array(content) {
     const arrStr = content.join('');
 
     this.each((_, elem) => {
       elem.append(arrStr);
     });
-  }
+  },
+  unkown: () => {},
+};
+
+function append(content) {
+  const contentType = getArgumentType.call(this, content);
+
+  appendTypeFuncs[contentType]?.call(this, content);
 
   return this;
 }

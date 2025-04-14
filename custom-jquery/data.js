@@ -1,25 +1,31 @@
-function data(name, value) {
-  const element = this[0];
+const { getArgumentType } = require('./utils/getArgumentType');
 
-  if (name === undefined) {
+const dataTypeFunc = {
+  undefined(element) {
     return element.dataset;
-  }
+  },
+  string(element, name, value) {
+    if (value === undefined) {
+      return element.dataset[name];
+    }
 
-  if (typeof name === 'string' && value === undefined) {
-    return element.dataset[name];
-  }
-
-  if (typeof name === 'string') {
     this.attr(`data-${name}`, value);
-  }
-
-  if (name.toString() === '[object Object]') {
+  },
+  object(_, name) {
     Object.entries(name).forEach(([dataName, dataValue]) => {
       this.data(dataName, dataValue);
     });
-  }
+  },
+};
 
-  return this;
+function data(name, value) {
+  const element = this[0];
+
+  const nameType = getArgumentType.call(this, name);
+
+  const result = dataTypeFunc[nameType]?.call(this, element, name, value);
+
+  return result ?? this;
 }
 
 module.exports = { data };

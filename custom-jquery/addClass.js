@@ -11,22 +11,19 @@ function filterClassNames(classNames) {
 }
 
 function addClass(argument) {
-  if (typeof argument === 'function') {
-    this.each((index, elem) => {
-      const classNames = argument.call(elem, index, elem.className);
+  const isArgumentFunc = typeof argument === 'function';
 
-      const classNamesArr = filterClassNames(classNames);
+  this.each((index, elem) => {
+    let classNames = argument;
 
-      elem.classList.add(...classNamesArr);
-    });
-  } else {
-    this.each((_, elem) => {
-      console.log({ _, elem });
-      const classNamesArr = filterClassNames(argument);
+    if (isArgumentFunc) {
+      classNames = argument.call(elem, index, elem.className);
+    }
 
-      elem.classList.add(...classNamesArr);
-    });
-  }
+    const classNamesArr = filterClassNames(classNames);
+
+    elem.classList.add(...classNamesArr);
+  });
 
   return this;
 }

@@ -1,19 +1,29 @@
-function html(argument) {
-  if (argument === undefined) {
+const { getArgumentType } = require('./utils/getArgumentType');
+
+const htmlTypeFunc = {
+  undefined() {
     return this[0].innerHTML;
-  } else if (typeof argument === 'string') {
+  },
+  string(argument) {
     this.each((_, elem) => {
       elem.innerHTML = argument;
     });
-  } else if (typeof argument === 'function') {
+  },
+  function(argument) {
     this.each((_, elem) => {
       const htmlContent = argument.call(elem, _, elem.innerHTML);
 
       elem.innerHTML = htmlContent;
     });
-  }
+  },
+};
 
-  return this;
+function html(argument) {
+  const argumentType = getArgumentType.call(this, argument);
+
+  const result = htmlTypeFunc[argumentType]?.call(this, argument);
+
+  return result ?? this;
 }
 
 module.exports = { html };

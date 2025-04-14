@@ -1,3 +1,5 @@
+const { getArgumentType } = require('./utils/getArgumentType');
+
 function addElements(collection) {
   collection.forEach((el, i) => {
     this[i] = el;
@@ -5,15 +7,25 @@ function addElements(collection) {
   });
 }
 
-function _initElements(selectorOrElement) {
-  if (typeof selectorOrElement === 'string') {
+const _initElementsFuncs = {
+  string(selectorOrElement) {
     const collection = document.querySelectorAll(selectorOrElement);
     addElements.call(this, collection);
-  } else if (selectorOrElement instanceof HTMLElement) {
+  },
+  element(selectorOrElement) {
     this[0] = selectorOrElement;
-  } else {
+  },
+  other(selectorOrElement) {
     addElements.call(this, Array.from(selectorOrElement));
-  }
+  },
+};
+
+function _initElements(selectorOrElement) {
+  const argumentType = getArgumentType.call(this, selectorOrElement);
+
+  const funcName = argumentType in _initElementsFuncs ? argumentType : 'other';
+
+  _initElementsFuncs[funcName].call(this, selectorOrElement);
 }
 
 module.exports = { _initElements };
